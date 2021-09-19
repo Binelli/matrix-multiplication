@@ -31,6 +31,17 @@ void mult_chg_loop() {
     }
 }
 
+void mult_parallel() {
+    #pragma omp parallel for
+    for (int i = 0; i < n; ++i) {
+        for (int k = 0; k < n; ++k) {
+            for (int j = 0; j < n; ++j) {
+                C[i][j] += A[i][k] * B[k][j];
+            }
+        }
+    } 
+}
+
 int main(int argc, char *argv[])  {
     int test_perf = 1;
 
@@ -56,6 +67,9 @@ int main(int argc, char *argv[])  {
             break;
         case 2:
             mult_chg_loop();
+            break;
+        case 3:
+            mult_parallel();
             break;
         default:
             printf("Test perf %d not implemented", test_perf);

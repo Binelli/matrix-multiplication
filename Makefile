@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-O3
+CFLAGS=-O3 -fopenmp
 LIBS=
 SRC_DIR=./src
 OBJ_DIR=obj
