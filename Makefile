@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-O3 -fopenmp
+CFLAGS=-O3 -fopenmp -march=native -ffast-math
 LIBS=
 SRC_DIR=./src
 OBJ_DIR=obj
