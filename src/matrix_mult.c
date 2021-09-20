@@ -42,6 +42,24 @@ void mult_parallel() {
     } 
 }
 
+void mult_tiled() {
+    int s = 64;
+    #pragma omp parallel for
+    for (int ih = 0; ih < n; ih += s) {
+        for (int jh = 0; jh < n; jh += s) {
+            for (int kh = 0; kh < n; kh += s) {
+                for (int il = 0; il < s; ++il) {
+                    for (int kl = 0; kl < s; ++kl) {
+                        for (int jl = 0; jl < s; ++jl) {
+                            C[ih + il][jh + jl] += A[ih + il][kh + kl] * B[kh + kl][jh + jl];
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 int main(int argc, char *argv[])  {
     int test_perf = 1;
 
@@ -52,9 +70,9 @@ int main(int argc, char *argv[])  {
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
             A[i][j] = (double)rand() / (double)RAND_MAX;
-	    B[i][j] = (double)rand() / (double)RAND_MAX;
-	    C[i][j] = 0.0;
-	}
+            B[i][j] = (double)rand() / (double)RAND_MAX;
+            C[i][j] = 0.0;
+        }
     }
 
     struct timeval start, end;
@@ -70,6 +88,9 @@ int main(int argc, char *argv[])  {
             break;
         case 3:
             mult_parallel();
+            break;
+        case 4:
+            mult_tiled();
             break;
         default:
             printf("Test perf %d not implemented", test_perf);
